@@ -1,31 +1,21 @@
 {
-  "_comment": "IMPORTANT: Replace this file with your real google-services.json from Firebase Console.",
-  "_instructions": [
-    "1. Go to https://console.firebase.google.com",
-    "2. Create a project or open an existing one",
-    "3. Click 'Add app' → Android",
-    "4. Enter package name: com.speechsub",
-    "5. Download google-services.json",
-    "6. Replace this file with the downloaded one",
-    "7. Enable Authentication (Email/Password) in Firebase Console",
-    "8. Enable Firestore Database in Firebase Console"
-  ],
   "project_info": {
-    "project_number": "YOUR_PROJECT_NUMBER",
-    "project_id": "YOUR_PROJECT_ID",
-    "storage_bucket": "YOUR_PROJECT_ID.appspot.com"
+    "project_number": "000000000000",
+    "project_id": "speechsub-placeholder",
+    "storage_bucket": "speechsub-placeholder.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:YOUR_PROJECT_NUMBER:android:YOUR_APP_ID",
+        "mobilesdk_app_id": "1:000000000000:android:0000000000000000000000",
         "android_client_info": {
           "package_name": "com.speechsub"
         }
       },
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "YOUR_API_KEY"
+          "current_key": "AIzaPlaceholderKeyForBuildOnly00000000000"
         }
       ],
       "services": {
