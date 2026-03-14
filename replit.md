@@ -2,7 +2,22 @@
 
 ## Overview
 
-pnpm workspace monorepo using TypeScript. Each package manages its own dependencies.
+pnpm workspace monorepo using TypeScript, plus the **SpeechSub Android app** (Kotlin + Jetpack Compose).
+
+## SpeechSub Android App (`SpeechSub/`)
+
+Kotlin Android app for automatic video captioning. Full MVVM architecture.
+
+**Screens:** Splash → Login/SignUp → Home → Processing → Caption Editor → Export → Settings
+
+**Key files:**
+- `app/build.gradle.kts` — dependencies and build config
+- `gradle/libs.versions.toml` — version catalog
+- `app/google-services.json` — Firebase config (⚠ replace with real one)
+- `app/proguard-rules.pro` — R8 shrinking rules
+- `.github/workflows/release.yml` — auto-release APK on git tag push
+
+**To build locally:** Open `SpeechSub/` in Android Studio, add real `google-services.json`, then Run.
 
 ## Stack
 

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Splash background — deep dark navy to match Compose dark theme -->
+    <color name="splash_background">#0D0D1A</color>
+
+    <!-- Brand colors (mirrored from Compose theme for XML usage) -->
+    <color name="primary">#7B68EE</color>
+    <color name="on_primary">#1A1A2E</color>
+    <color name="background">#0D0D1A</color>
+    <color name="surface">#14142B</color>
+    <color name="on_background">#E8E6F0</color>
+
+    <!-- Caption color palette — shown in the editor color picker -->
+    <color name="caption_white">#FFFFFF</color>
+    <color name="caption_yellow">#FFE066</color>
+    <color name="caption_cyan">#64FFDA</color>
+    <color name="caption_pink">#FF80AB</color>
+    <color name="caption_orange">#FFAB40</color>
+    <color name="caption_green">#69F0AE</color>
+    <color name="caption_red">#FF5252</color>
+    <color name="caption_blue">#82B1FF</color>
+</resources>

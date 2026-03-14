@@ -1,0 +1,44 @@
+# ===== Android =====
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# ===== Signing =====
+*.jks
+*.keystore
+release.keystore
+
+# ===== Firebase =====
+# IMPORTANT: Never commit your real google-services.json to a public repo!
+# The placeholder in the repo will be detected by the .json content (no "current_key" value)
+# Replace app/google-services.json with your actual Firebase config locally.
+# In CI/CD, inject it via the GOOGLE_SERVICES_JSON secret (already configured in the workflow).
+
+# ===== Secrets =====
+*.env
+secrets.properties
+
+# ===== Build outputs =====
+app/build/
+app/schemas/
+
+# ===== Kotlin =====
+*.class
+*.kotlin_module
+
+# ===== IDE =====
+*.swp
+*.swo
+*~

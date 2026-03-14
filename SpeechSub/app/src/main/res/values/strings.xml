@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">SpeechSub</string>
+    <string name="app_tagline">Video Captions, Made Easy</string>
+
+    <!-- Home -->
+    <string name="home_title">SpeechSub</string>
+    <string name="home_subtitle">Video Captions</string>
+    <string name="import_video">Import Video</string>
+    <string name="recent_projects">Recent Projects</string>
+    <string name="no_projects_yet">No projects yet.\nTap Import Video to get started.</string>
+
+    <!-- Processing -->
+    <string name="recognizing_speech">Recognizing Speech\u2026</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Editor -->
+    <string name="caption_editor">Caption Editor</string>
+    <string name="edit_caption">Edit Caption</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+    <string name="split_caption">Split Caption</string>
+    <string name="merge_with_next">Merge with Next</string>
+
+    <!-- Export -->
+    <string name="export">Export</string>
+    <string name="export_as_srt">Export as SRT</string>
+    <string name="export_as_txt">Export as Text</string>
+    <string name="copy_transcript">Copy Transcript</string>
+    <string name="save_to_cloud">Save to Cloud</string>
+    <string name="exported_successfully">Exported successfully!</string>
+    <string name="copied_to_clipboard">Copied to clipboard!</string>
+
+    <!-- Settings -->
+    <string name="settings">Settings</string>
+    <string name="account">Account</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="theme">Theme</string>
+    <string name="language">Language</string>
+    <string name="cloud_backup">Cloud Backup</string>
+    <string name="about">About</string>
+    <string name="version">Version</string>
+
+    <!-- Auth -->
+    <string name="login">Log In</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="name">Full Name</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="already_have_account">Already have an account? Log In</string>
+    <string name="dont_have_account">Don\'t have an account? Sign Up</string>
+
+    <!-- Notification channel -->
+    <string name="processing_channel_name">Speech Processing</string>
+    <string name="processing_channel_desc">Shows progress while converting speech to text</string>
+    <string name="processing_notification_title">SpeechSub</string>
+    <string name="processing_notification_text">Processing speech\u2026</string>
+
+    <!-- Errors -->
+    <string name="error_no_captions">No captions found. Please re-process the video.</string>
+    <string name="error_export_failed">Export failed. Please try again.</string>
+    <string name="error_generic">Something went wrong. Please try again.</string>
+</resources>

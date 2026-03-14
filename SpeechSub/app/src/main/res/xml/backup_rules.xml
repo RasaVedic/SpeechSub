@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Backup Rules — legacy Auto Backup exclusions for Android < 12.
+    Mirrors data_extraction_rules.xml for older API levels.
+-->
+<full-backup-content>
+    <!-- Exclude the Room database from automatic backup -->
+    <exclude domain="database" path="speechsub.db" />
+    <exclude domain="database" path="speechsub.db-shm" />
+    <exclude domain="database" path="speechsub.db-wal" />
+</full-backup-content>

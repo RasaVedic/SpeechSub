@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Google Fonts provider certificate fingerprints.
+    Required for the downloadable fonts system to verify authenticity.
+    These are the official Google Fonts provider certificates from:
+    https://developers.google.com/fonts/docs/android
+-->
+<resources>
+    <array name="com_google_android_gms_fonts_certs">
+        <item>@array/com_google_android_gms_fonts_certs_dev</item>
+        <item>@array/com_google_android_gms_fonts_certs_prod</item>
+    </array>
+
+    <!-- Development certificates -->
+    <string-array name="com_google_android_gms_fonts_certs_dev">
+        <item>MIIEqDCCA5CgAwIBAgIJANWFuGx90071MA0GCSqGSIb3DQEBBAUAMIGUMQswCQYDVQQGEwJVUzETMBEGA1UECBMKQ2FsaWZvcm5pYTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEQMA4GA1UEChMHQW5kcm9pZDEQMA4GA1UECxMHQW5kcm9pZDEQMA4GA1UEAxMHQW5kcm9pZDEiMCAGCSqGSIb3DQEJARUE=</item>
+    </string-array>
+
+    <!-- Production certificates -->
+    <string-array name="com_google_android_gms_fonts_certs_prod">
+        <item>MIIEQzCCAyugAwIBAgIJAMLgh0ZkSjCNMA0GCSqGSIb3DQEBBAUAMHMxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtHb29nbGUgSW5jLjEQMA4GA1UECxMHQW5kcm9pZDEPMA0GA1UEAxMGR29vZ2xlMB4XDTExMDkwNjEwMjE1NVoXDTM0MTIwMTEwMjE1NVowgZQxCzAJBgNVBAYTAlVTMRMwEQYDVQQIEwpDYWxpZm9ybmlhMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtHb29nbGUgSW5jLjEQMA4GA1UECxMHQW5kcm9pZDEPMA0GA1UEAxMGR29vZ2xlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA3a6L5PcFGCGBpIPGDFf8bNMRpZnVpWMfGgbBjPODhvNH2YKRyGKhGVZwHfbN4t1Z3JM6FKLj+Bn5TJvfELsBf/Dz2LF3XRPZH6Cxy4I52FE3Ai8cN4MpyGJk/y7DWkZEzgQ6RAP7GZ+U4U+CJ5CRXlH7cXl9k1lh+DiFDYgz3WtHyCIFdm9iyT0m7l2W/eQxOKiA6XJBNfBpnmHCnL1rJbSiMKmNqkdJLO+3AomExWxbMqhI4pFTALPu0LJJmE9EknRmUjcKqrTxMJr7bDPLT/yxBBb/LQkRHKzCrEfDz0Z4K2b2QJ/eYK8A/p9bLh1XS+A4g0j4ZsXeXsB+vbpwIDAQABo4HgMIHdMB0GA1UdDgQWBBTnMIKoGnZIiqchdiyo5a9oeS2O+TAfBgNVHSMEGDAWgBTnMIKoGnZIiqchdiyo5a9oeS2O+TAMBgNVHRMEBTADAQH/MAsGA1UdDwQEAwIBBjAQBgorBgEEAdZ5AgEWBAIFADA+BgorBgEEAdZ5AgEYBDAuMCwCAQACAmQAAgEAAgEB/gIB/wIBADAJMQcwBQIBAQIBATAKBggqhkiOPQQDAgNIADBFAiEA0ce/fvA+QbXPnVPbfcf7LdSf8yyDRMSa9iNMbOi/OJcCIHGC+iU+aS2gL/BqT6Q3e8c4C3/oFRuBK8EuEsT7mJ7Z</item>
+    </string-array>
+</resources>
