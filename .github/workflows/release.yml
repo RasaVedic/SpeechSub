@@ -29,7 +29,9 @@ on:
 
   pull_request:
     branches:
-      - main           # Build debug APK to verify PRs compile
+      - main
+
+  workflow_dispatch:   # Manual trigger from GitHub Actions tab
 
 permissions:
   contents: write      # Required to create GitHub Releases and upload assets
