@@ -11,14 +11,12 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
-// =================== DARK COLOR SCHEME (DEFAULT) ===================
 private val DarkColorScheme = darkColorScheme(
-    primary         = Color(0xFF7B68EE),   // Medium Slate Blue — primary accent
+    primary         = Color(0xFF7B68EE),
     onPrimary       = Color(0xFF1A1A2E),
     primaryContainer= Color(0xFF3D3580),
     onPrimaryContainer = Color(0xFFD4CFFF),
@@ -28,9 +26,9 @@ private val DarkColorScheme = darkColorScheme(
     onSecondaryContainer = Color(0xFFDDD0FF),
     tertiary        = Color(0xFF64B5F6),
     onTertiary      = Color(0xFF001E3C),
-    background      = Color(0xFF0D0D1A),   // Deep dark navy
+    background      = Color(0xFF0D0D1A),
     onBackground    = Color(0xFFE8E6F0),
-    surface         = Color(0xFF14142B),   // Dark surface
+    surface         = Color(0xFF14142B),
     onSurface       = Color(0xFFE8E6F0),
     surfaceVariant  = Color(0xFF1E1E3A),
     onSurfaceVariant= Color(0xFFB8B5CC),
@@ -39,7 +37,6 @@ private val DarkColorScheme = darkColorScheme(
     onError         = Color(0xFF3A0016),
 )
 
-// =================== LIGHT COLOR SCHEME ===================
 private val LightColorScheme = lightColorScheme(
     primary         = Color(0xFF5B4FCF),
     onPrimary       = Color(0xFFFFFFFF),
@@ -62,17 +59,10 @@ private val LightColorScheme = lightColorScheme(
     onError         = Color(0xFFFFFFFF),
 )
 
-/**
- * SpeechSubTheme — the root Material3 theme for the app.
- *
- * Default: DARK mode (modern subtitle app feel).
- * Supports dynamic color on Android 12+ devices.
- */
 @Composable
 fun SpeechSubTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color — uses wallpaper colors on Android 12+
-    dynamicColor: Boolean = false, // disabled by default to keep brand colors
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -84,12 +74,11 @@ fun SpeechSubTheme(
         else -> LightColorScheme
     }
 
-    // Update system bar colors to match theme
     val view = LocalView.current
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = Color.Transparent.toArgb()
+            WindowCompat.setDecorFitsSystemWindows(window, false)
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
