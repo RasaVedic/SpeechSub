@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.outlined.TextSnippet
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -27,17 +29,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.speechsub.data.local.CaptionEntity
 import com.speechsub.ui.theme.InterFontFamily
 
-/**
- * ExportScreen — lets users copy, export, and sync their captions.
- *
- * Export options:
- * 1. Copy full transcript to clipboard
- * 2. Export as SRT file (saved to Downloads)
- * 3. Export as plain TXT (saved to Downloads)
- * 4. Save to Firebase cloud (if logged in)
- *
- * Also shows a preview of the captions below the action buttons.
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExportScreen(
@@ -51,7 +42,6 @@ fun ExportScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Show snackbar on success or error
     LaunchedEffect(exportState) {
         when (val s = exportState) {
             is ExportState.Success -> {
@@ -83,7 +73,7 @@ fun ExportScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
@@ -110,7 +100,6 @@ fun ExportScreen(
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 contentPadding = PaddingValues(vertical = 16.dp)
             ) {
-                // ── Stats card ──────────────────────────────────
                 item {
                     StatsCard(
                         captionCount = captions.size,
@@ -119,7 +108,6 @@ fun ExportScreen(
                     )
                 }
 
-                // ── Export action cards ──────────────────────────
                 item {
                     Text(
                         "Export Options",
@@ -148,7 +136,7 @@ fun ExportScreen(
                             onClick     = viewModel::exportAsSrt
                         )
                         ExportOptionCard(
-                            icon        = Icons.Outlined.TextSnippet,
+                            icon        = Icons.AutoMirrored.Outlined.TextSnippet,
                             title       = "Export as Text",
                             description = "Save .txt transcript file to Downloads folder",
                             enabled     = !isLoading,
@@ -168,7 +156,6 @@ fun ExportScreen(
                     }
                 }
 
-                // Loading indicator
                 item {
                     AnimatedVisibility(
                         visible = exportState is ExportState.Loading,
@@ -180,7 +167,6 @@ fun ExportScreen(
                     }
                 }
 
-                // ── Caption Preview ──────────────────────────────
                 if (captions.isNotEmpty()) {
                     item {
                         Spacer(Modifier.height(8.dp))
@@ -217,10 +203,6 @@ fun ExportScreen(
     }
 }
 
-// ============================================================
-// STATS CARD
-// ============================================================
-
 @Composable
 private fun StatsCard(captionCount: Int, totalDuration: Long, viewModel: ExportViewModel) {
     Card(
@@ -252,10 +234,6 @@ private fun StatItem(label: String, value: String) {
             color = MaterialTheme.colorScheme.onSurface.copy(0.6f))
     }
 }
-
-// ============================================================
-// EXPORT OPTION CARD
-// ============================================================
 
 @Composable
 private fun ExportOptionCard(
@@ -309,10 +287,6 @@ private fun ExportOptionCard(
         }
     }
 }
-
-// ============================================================
-// CAPTION PREVIEW ROW
-// ============================================================
 
 @Composable
 private fun CaptionPreviewRow(caption: CaptionEntity, viewModel: ExportViewModel) {
