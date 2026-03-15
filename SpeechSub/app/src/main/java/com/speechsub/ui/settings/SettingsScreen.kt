@@ -7,6 +7,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -23,15 +25,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.speechsub.BuildConfig
 
-/**
- * SettingsScreen — app preferences, account management, and about section.
- *
- * Sections:
- * 1. Account — user avatar, name, email, sign-out
- * 2. Captions — default language, font, font size
- * 3. Storage — cloud sync toggle
- * 4. About — app version
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -52,12 +45,10 @@ fun SettingsScreen(
     var showLanguageDialog   by remember { mutableStateOf(false) }
     var showFontDialog       by remember { mutableStateOf(false) }
 
-    // Navigate to login after sign-out
     LaunchedEffect(signedOut) {
         if (signedOut) onSignedOut()
     }
 
-    // Snackbar
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let {
             snackbarHostState.showSnackbar(it)
@@ -71,7 +62,7 @@ fun SettingsScreen(
                 title = { Text("Settings", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent)
@@ -98,10 +89,7 @@ fun SettingsScreen(
                 contentPadding      = PaddingValues(vertical = 16.dp)
             ) {
 
-                // ── Section 1: Account ─────────────────────────────
-                item {
-                    SettingsSectionHeader("Account")
-                }
+                item { SettingsSectionHeader("Account") }
                 item {
                     AccountCard(
                         name    = viewModel.userName,
@@ -111,7 +99,6 @@ fun SettingsScreen(
                     )
                 }
 
-                // ── Section 2: Caption Defaults ────────────────────
                 item { Spacer(Modifier.height(8.dp)); SettingsSectionHeader("Caption Defaults") }
 
                 item {
@@ -139,7 +126,6 @@ fun SettingsScreen(
                     )
                 }
 
-                // ── Section 3: Storage ─────────────────────────────
                 item { Spacer(Modifier.height(8.dp)); SettingsSectionHeader("Storage") }
 
                 item {
@@ -156,7 +142,6 @@ fun SettingsScreen(
                     )
                 }
 
-                // ── Section 4: About ──────────────────────────────
                 item { Spacer(Modifier.height(8.dp)); SettingsSectionHeader("About") }
                 item {
                     SettingsItemRow(
@@ -179,7 +164,6 @@ fun SettingsScreen(
             }
         }
 
-        // ── Sign Out Confirmation Dialog ──────────────────────────
         if (showSignOutDialog) {
             AlertDialog(
                 onDismissRequest = { showSignOutDialog = false },
@@ -199,7 +183,6 @@ fun SettingsScreen(
             )
         }
 
-        // ── Language Picker Dialog ────────────────────────────────
         if (showLanguageDialog) {
             PickerDialog(
                 title   = "Default Language",
@@ -210,7 +193,6 @@ fun SettingsScreen(
             )
         }
 
-        // ── Font Picker Dialog ────────────────────────────────────
         if (showFontDialog) {
             PickerDialog(
                 title   = "Default Font",
@@ -223,10 +205,6 @@ fun SettingsScreen(
     }
 }
 
-// ============================================================
-// COMPOSABLE COMPONENTS
-// ============================================================
-
 @Composable
 private fun SettingsSectionHeader(title: String) {
     Text(
@@ -237,9 +215,6 @@ private fun SettingsSectionHeader(title: String) {
     )
 }
 
-/**
- * AccountCard — shows user avatar, name, email, and a sign-out button.
- */
 @Composable
 private fun AccountCard(
     name: String, email: String, isLoggedIn: Boolean, onSignOut: () -> Unit
@@ -258,7 +233,6 @@ private fun AccountCard(
                 .padding(16.dp),
             verticalAlignment   = Alignment.CenterVertically
         ) {
-            // Avatar circle with initial
             Box(
                 modifier = Modifier
                     .size(56.dp)
@@ -292,7 +266,7 @@ private fun AccountCard(
             if (isLoggedIn) {
                 IconButton(onClick = onSignOut) {
                     Icon(
-                        Icons.Default.Logout,
+                        Icons.AutoMirrored.Filled.Logout,
                         contentDescription = "Sign Out",
                         tint = MaterialTheme.colorScheme.error.copy(0.8f)
                     )
@@ -302,9 +276,6 @@ private fun AccountCard(
     }
 }
 
-/**
- * SettingsItemRow — a tappable settings row with icon, title, and subtitle.
- */
 @Composable
 private fun SettingsItemRow(
     icon    : ImageVector,
@@ -341,9 +312,6 @@ private fun SettingsItemRow(
     }
 }
 
-/**
- * SettingsSwitchRow — a settings row with a toggle switch.
- */
 @Composable
 private fun SettingsSwitchRow(
     icon     : ImageVector,
@@ -389,9 +357,6 @@ private fun SettingsSwitchRow(
     }
 }
 
-/**
- * FontSizeSlider — a settings row with a slider for font size.
- */
 @Composable
 private fun FontSizeSlider(size: Float, onChange: (Float) -> Unit) {
     Card(
@@ -423,9 +388,6 @@ private fun FontSizeSlider(size: Float, onChange: (Float) -> Unit) {
     }
 }
 
-/**
- * PickerDialog — reusable dialog for selecting from a list of options.
- */
 @Composable
 private fun PickerDialog(
     title    : String,
