@@ -15,6 +15,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.MergeType
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -40,9 +42,6 @@ import com.speechsub.ui.theme.HindFontFamily
 import com.speechsub.ui.theme.InterFontFamily
 import com.speechsub.ui.theme.NunitoFontFamily
 
-// ============================================================
-// CAPTION COLOR PALETTE — shown in the color picker row
-// ============================================================
 private val captionColors = listOf(
     "#FFFFFF" to "White",
     "#FFE066" to "Yellow",
@@ -54,9 +53,6 @@ private val captionColors = listOf(
     "#82B1FF" to "Blue",
 )
 
-// ============================================================
-// FONT OPTIONS — shown in the font picker
-// ============================================================
 private val fontOptions = listOf(
     "inter"        to "Inter",
     "nunito"       to "Nunito",
@@ -64,22 +60,6 @@ private val fontOptions = listOf(
     "roboto_mono"  to "Roboto Mono",
 )
 
-/**
- * CaptionEditorScreen — the main caption timeline editor.
- *
- * Layout:
- * ┌──────────────────────────────────────────┐
- * │  Top bar (back, title, export button)    │
- * ├──────────────────────────────────────────┤
- * │  Caption timeline list (scrollable)      │
- * │   ┌──────────────────────────────────┐   │
- * │   │  [00:00:01,000 → 00:00:04,500]   │   │
- * │   │  Caption text (tap to edit)      │   │
- * │   │  [Bold] [Italic] [Color] [Font]  │   │
- * │   │  [Split] [Merge] [Delete]        │   │
- * │   └──────────────────────────────────┘   │
- * └──────────────────────────────────────────┘
- */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CaptionEditorScreen(
@@ -97,7 +77,6 @@ fun CaptionEditorScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val listState         = rememberLazyListState()
 
-    // Show snackbar when message arrives
     LaunchedEffect(snackbarMessage) {
         snackbarMessage?.let { msg ->
             snackbarHostState.showSnackbar(msg)
@@ -126,15 +105,13 @@ fun CaptionEditorScreen(
                 },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Default.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
                     }
                 },
                 actions = {
-                    // Export button
                     IconButton(onClick = { onNavigateExport(projectId) }) {
                         Icon(Icons.Default.Share, contentDescription = "Export")
                     }
-                    // Settings button
                     IconButton(onClick = onNavigateSettings) {
                         Icon(Icons.Default.Settings, contentDescription = "Settings")
                     }
@@ -148,7 +125,6 @@ fun CaptionEditorScreen(
         containerColor = Color.Transparent,
     ) { paddingValues ->
 
-        // Full-screen gradient background
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -160,7 +136,6 @@ fun CaptionEditorScreen(
                 .padding(paddingValues)
         ) {
             if (captions.isEmpty()) {
-                // Empty state
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Icon(
@@ -183,7 +158,6 @@ fun CaptionEditorScreen(
                     }
                 }
             } else {
-                // Caption timeline list
                 LazyColumn(
                     state = listState,
                     modifier = Modifier.fillMaxSize(),
@@ -200,7 +174,6 @@ fun CaptionEditorScreen(
                             onDeselect  = { viewModel.selectCaption(null) }
                         )
                     }
-                    // Bottom padding so last card isn't behind nav bar
                     item { Spacer(Modifier.height(80.dp)) }
                 }
             }
@@ -208,16 +181,6 @@ fun CaptionEditorScreen(
     }
 }
 
-// ============================================================
-// CAPTION CARD — one row in the timeline
-// ============================================================
-
-/**
- * CaptionCard — displays a single caption with inline editing.
- *
- * Collapsed view:   timestamp + first line of text
- * Expanded view:    editable text + styling controls
- */
 @Composable
 fun CaptionCard(
     caption   : CaptionEntity,
@@ -227,11 +190,9 @@ fun CaptionCard(
     onSelect  : () -> Unit,
     onDeselect: () -> Unit,
 ) {
-    // Local edit text state (synced to DB on save)
     var editText by remember(caption.id) { mutableStateOf(caption.text) }
     val focusRequester = remember { FocusRequester() }
 
-    // Highlight color for selected card
     val cardColor = if (isSelected)
         MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.4f)
     else
@@ -255,13 +216,11 @@ fun CaptionCard(
     ) {
         Column(modifier = Modifier.padding(12.dp)) {
 
-            // ── Row 1: Index + Timestamp ──────────────────
             Row(
                 verticalAlignment    = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                // Segment number badge
                 Box(
                     modifier = Modifier
                         .size(28.dp)
@@ -279,7 +238,6 @@ fun CaptionCard(
 
                 Spacer(Modifier.width(8.dp))
 
-                // Timestamp
                 Text(
                     text  = "${viewModel.formatTimestamp(caption.startTimeMs)}  →  ${viewModel.formatTimestamp(caption.endTimeMs)}",
                     style = MaterialTheme.typography.labelSmall,
@@ -291,9 +249,7 @@ fun CaptionCard(
 
             Spacer(Modifier.height(8.dp))
 
-            // ── Row 2: Caption Text (editable when selected) ──
             if (isSelected) {
-                // Inline text editor
                 LaunchedEffect(isSelected) {
                     focusRequester.requestFocus()
                 }
@@ -326,7 +282,6 @@ fun CaptionCard(
 
                 Spacer(Modifier.height(8.dp))
 
-                // ── Save / Cancel row ──
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilledTonalButton(
                         onClick = {
@@ -342,7 +297,7 @@ fun CaptionCard(
 
                     OutlinedButton(
                         onClick = {
-                            editText = caption.text // revert
+                            editText = caption.text
                             onDeselect()
                         },
                         contentPadding = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
@@ -355,9 +310,6 @@ fun CaptionCard(
                 HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
                 Spacer(Modifier.height(12.dp))
 
-                // ── Styling Controls ──────────────────────────────────
-
-                // Bold / Italic toggles
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilterChip(
                         selected = caption.isBold,
@@ -373,7 +325,6 @@ fun CaptionCard(
 
                 Spacer(Modifier.height(8.dp))
 
-                // Color picker row
                 Text(
                     "Caption Color",
                     style = MaterialTheme.typography.labelSmall,
@@ -393,7 +344,6 @@ fun CaptionCard(
 
                 Spacer(Modifier.height(12.dp))
 
-                // Font picker row
                 Text(
                     "Font",
                     style = MaterialTheme.typography.labelSmall,
@@ -414,7 +364,6 @@ fun CaptionCard(
                 HorizontalDivider(color = MaterialTheme.colorScheme.outline.copy(alpha = 0.2f))
                 Spacer(Modifier.height(12.dp))
 
-                // ── Timeline Actions ──────────────────────────────────
                 Text(
                     "Actions",
                     style = MaterialTheme.typography.labelSmall,
@@ -434,7 +383,7 @@ fun CaptionCard(
                         onClick = { viewModel.mergeWithNext(caption) },
                         contentPadding = PaddingValues(horizontal = 10.dp, vertical = 4.dp)
                     ) {
-                        Icon(Icons.Default.MergeType, null, Modifier.size(14.dp))
+                        Icon(Icons.AutoMirrored.Filled.MergeType, null, Modifier.size(14.dp))
                         Spacer(Modifier.width(4.dp))
                         Text("Merge", style = MaterialTheme.typography.labelSmall)
                     }
@@ -444,7 +393,7 @@ fun CaptionCard(
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = MaterialTheme.colorScheme.error
                         ),
-                        border = ButtonDefaults.outlinedButtonBorder.copy(
+                        border = ButtonDefaults.outlinedButtonBorder(enabled = true).copy(
                             brush = SolidColor(MaterialTheme.colorScheme.error.copy(0.4f))
                         )
                     ) {
@@ -455,7 +404,6 @@ fun CaptionCard(
                 }
 
             } else {
-                // Collapsed view — just show the text
                 Text(
                     text  = caption.text,
                     style = MaterialTheme.typography.bodyMedium,
@@ -474,10 +422,6 @@ fun CaptionCard(
         }
     }
 }
-
-// ============================================================
-// COLOR DOT — a tappable circle in the color picker
-// ============================================================
 
 @Composable
 private fun ColorDot(hex: String, name: String, selected: Boolean, onClick: () -> Unit) {
@@ -505,10 +449,6 @@ private fun ColorDot(hex: String, name: String, selected: Boolean, onClick: () -
         }
     }
 }
-
-// ============================================================
-// HELPER — parse a hex color string to a Compose Color
-// ============================================================
 
 internal fun parseHexColor(hex: String): Color {
     return try {
