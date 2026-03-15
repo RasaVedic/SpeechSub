@@ -39,8 +39,6 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            // Signing config for release — set via environment variables in CI
-            signingConfig = signingConfigs.getByName("debug") // replace with release in production
         }
     }
 
