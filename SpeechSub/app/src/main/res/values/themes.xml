@@ -1,24 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!--
-        Theme.SpeechSub — the XML theme used before Compose takes over.
-        We use NoActionBar so Compose manages the entire window.
-        The splash screen uses this theme via the windowSplashScreenBackground attribute.
-    -->
+<resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.SpeechSub" parent="android:Theme.Material.Light.NoActionBar">
-        <!-- Splash screen background color (shown before SplashScreen API kicks in) -->
         <item name="android:windowBackground">@color/splash_background</item>
-        <item name="android:windowSplashScreenBackground">@color/splash_background</item>
-
-        <!-- Status and nav bar — transparent, handled by Compose -->
         <item name="android:statusBarColor">@android:color/transparent</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
-
-        <!-- Edge-to-edge -->
         <item name="android:windowLayoutInDisplayCutoutMode" tools:ignore="NewApi">shortEdges</item>
     </style>
 
-    <!-- Splash screen theme — used as the postSplashScreenTheme -->
     <style name="Theme.SpeechSub.Splash" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">@color/splash_background</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
