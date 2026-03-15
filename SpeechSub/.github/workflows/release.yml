@@ -1,39 +1,24 @@
-# ================================================================
-# GitHub Actions — SpeechSub Auto Release Workflow
-#
-# Triggers on every push to main branch:
-#   - Builds a debug APK (always)
-#   - On version tag push (v*.*.*), builds a SIGNED release APK
-#     and creates a GitHub Release with the APK attached.
-#
-# Required GitHub Secrets (Settings → Secrets → Actions):
-#   KEYSTORE_BASE64    — base64-encoded keystore file
-#   KEYSTORE_PASSWORD  — keystore password
-#   KEY_ALIAS          — key alias inside the keystore
-#   KEY_PASSWORD       — key password
-#
-# To create a release:
-#   git tag v1.0.1
-#   git push origin v1.0.1
-# ================================================================
-
 name: Build and Release APK
 
 on:
   push:
     branches:
-      - main           # Build debug APK on every push to main
+      - main
     tags:
-      - 'v*.*.*'       # Build + release signed APK on version tags
-
+      - 'v*.*.*'
   pull_request:
     branches:
-      - main           # Build debug APK to verify PRs compile
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  # ============================================================
-  # Job 1: Build Debug APK (runs on every push/PR)
-  # ============================================================
+
+  # ─────────────────────────────────────────────
+  # JOB 1 — Debug APK (every push to main / PR)
+  # ─────────────────────────────────────────────
   build-debug:
     name: Build Debug APK
     runs-on: ubuntu-latest
@@ -52,27 +37,32 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x SpeechSub/gradlew
 
-      # Add google-services.json from secret
       - name: Write google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        working-directory: SpeechSub/app
         run: |
-          echo "$GOOGLE_SERVICES_JSON" > SpeechSub/app/google-services.json
+          if [ -n "${{ secrets.GOOGLE_SERVICES_JSON }}" ]; then
+            echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+          else
+            echo "No GOOGLE_SERVICES_JSON secret found, using repo file as-is"
+          fi
 
       - name: Build Debug APK
         working-directory: SpeechSub
-        run: ./gradlew assembleDebug --no-daemon
+        run: |
+          ./gradlew assembleDebug \
+            --no-daemon \
+            --stacktrace
 
-      - name: Upload Debug APK as artifact
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: speechsub-debug-${{ github.sha }}
+          name: SpeechSub-Debug-${{ github.sha }}
           path: SpeechSub/app/build/outputs/apk/debug/*.apk
           retention-days: 7
 
-  # ============================================================
-  # Job 2: Build + Sign Release APK (runs only on version tags)
-  # ============================================================
+  # ─────────────────────────────────────────────
+  # JOB 2 — Signed Release APK (version tags only)
+  # ─────────────────────────────────────────────
   build-release:
     name: Build Signed Release APK
     runs-on: ubuntu-latest
@@ -92,82 +82,62 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x SpeechSub/gradlew
 
-      # Write google-services.json from secret
       - name: Write google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        working-directory: SpeechSub/app
         run: |
-          echo "$GOOGLE_SERVICES_JSON" > SpeechSub/app/google-services.json
+          if [ -n "${{ secrets.GOOGLE_SERVICES_JSON }}" ]; then
+            echo "${{ secrets.GOOGLE_SERVICES_JSON }}" | base64 --decode > google-services.json
+          else
+            echo "No GOOGLE_SERVICES_JSON secret, using repo file"
+          fi
 
-      # Decode the keystore from base64 secret
       - name: Decode keystore
-        env:
-          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+        working-directory: SpeechSub/app
         run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode > SpeechSub/app/release.keystore
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > release.keystore
 
-      # Build signed release APK using keystore credentials
       - name: Build Signed Release APK
         working-directory: SpeechSub
         env:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS:         ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD:      ${{ secrets.KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
         run: |
           ./gradlew assembleRelease \
-            -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/SpeechSub/app/release.keystore" \
-            -Pandroid.injected.signing.store.password="$KEYSTORE_PASSWORD" \
-            -Pandroid.injected.signing.key.alias="$KEY_ALIAS" \
-            -Pandroid.injected.signing.key.password="$KEY_PASSWORD" \
-            --no-daemon
+            --no-daemon \
+            --stacktrace \
+            -Pandroid.injected.signing.store.file="${GITHUB_WORKSPACE}/SpeechSub/app/release.keystore" \
+            -Pandroid.injected.signing.store.password="${KEYSTORE_PASSWORD}" \
+            -Pandroid.injected.signing.key.alias="${KEY_ALIAS}" \
+            -Pandroid.injected.signing.key.password="${KEY_PASSWORD}"
 
-      # Get the tag name for the release title
       - name: Get tag name
         id: tag
         run: echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
 
-      # Create a GitHub Release and attach the APK
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name : ${{ steps.tag.outputs.TAG }}
-          name     : "SpeechSub ${{ steps.tag.outputs.TAG }}"
-          body     : |
+          tag_name: ${{ steps.tag.outputs.TAG }}
+          name: SpeechSub ${{ steps.tag.outputs.TAG }}
+          body: |
             ## SpeechSub ${{ steps.tag.outputs.TAG }}
 
-            ### What's New
-            - See CHANGELOG for details
+            **Download the APK below and install on your Android device (8.0+).**
 
-            ### Install
-            1. Download `speechsub-release-${{ steps.tag.outputs.TAG }}.apk` below
-            2. Enable "Install from unknown sources" in Android Settings
-            3. Open the APK file to install
+            ### How to Install
+            1. Download `*.apk` from the Assets section below
+            2. On your phone go to Settings → Security → Enable "Install from unknown sources"
+            3. Open the downloaded APK and install
 
             ### Requirements
-            - Android 8.0+ (API 26+)
-          files    : SpeechSub/app/build/outputs/apk/release/*.apk
-          draft    : false
+            - Android 8.0 or newer (API 26+)
+          files: SpeechSub/app/build/outputs/apk/release/*.apk
+          draft: false
           prerelease: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Clean up keystore from runner
-      - name: Remove keystore
+      - name: Clean up keystore
         if: always()
         run: rm -f SpeechSub/app/release.keystore
-
-  # ============================================================
-  # Job 3: Version Check Notification (informational)
-  # ============================================================
-  version-check:
-    name: Check for Version Update
-    runs-on: ubuntu-latest
-    if: startsWith(github.ref, 'refs/tags/v')
-    needs: build-release
-
-    steps:
-      - name: Report version
-        run: |
-          echo "✅ SpeechSub ${GITHUB_REF#refs/tags/} released successfully!"
-          echo "📦 APK attached to GitHub Release"
-          echo "🚀 Users with version checking enabled will see the update notification"
